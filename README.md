@@ -1,4 +1,4 @@
-## Instructions for using background subtraction algorithm for collision detection
+# Instructions for using background subtraction algorithm
 
 * **Requirements**
 
@@ -6,61 +6,61 @@
   
   Python3, Matlab
   
-  Python libraries: pyrealsense2, numpy, 
+  Python libraries: pyrealsense2, numpy, cv2, os, scipy.io
 
 * **Descriptions**
   
-  [**realsense2.py**](https://github.com/IVSR-SET-HUST/drone-coordinator/blob/sprint_2020-09-15/sensors/realsense2.py) contains **StreamInfo** and **RealSense2** class
-
-  StreamInfo class is used to construct a configuration for camera. A object has attributes: stream type, width, heigh, format, frame rate
-
-  streamInfo() method will return a configuration can use for RealSense2 class. If a configuration is false, it will return false
+  [**getdata.py**](https://github.com/IVSR-SET-HUST/drone-coordinator/blob/sprint_2020-09-15/sensors/realsense2.py) gets depth and color frame from D435 camera and saves to your data folder
   
-  D435 can get color and depth data. So stream type can be 'color' or 'depth'
+  [**read_depth_mat_v2.m**]() loads data, uses background subtraction algorithm and saves image result to your result folder
+
+  [**bounding_box.m**]() bounding box function, using on [**read_depth_mat_v2.m**] to bound detected object
   
-  format: 'rgb8' for 'color' and 'z16' for depth
+* **Scenario**
+ 
+  Fixed Camera captrue single object moving on a straight line.
   
-  Example:
+## **Implement**
+
+**Step 1: Create data folder and result folder**
   
-  ```
-  _color = StreamInfo('color', 640, 480, 'bgr8', 30)  
-  color_stream = _color.streamInfo() #color_stream can be used for RealSense2 class
-  ```
+ Create data folder contains 4 subfolder: depth_mat, depth_img, rgb_mat, rgb_img
 
+   * depth_mat: stores file mat for each depth frame
+ 
+   * depth_img: stores file jpg for each depth frame
+ 
+   * rgb_mat: stores file mat for each color frame
+ 
+   * rgb_img: stores file jpg for each color frame
 
-  RealSense2 class includes some function: capture(), startRecording(), stopRecording(), updateConfig()
-  
-  Initialization function needs three arguments: a configuration list (color, depth or both), path to recording file (string, default is 'record_bag_file.bag'),   device's serial (string, default '001622072448')
-  
-  Example: 
-  ```
-  rsObj = RealSense2([color_stream], "path/to/your/bag/file", "your device's serial")
-  ```
+   Create result folder
 
-  capture() function: can get color, depth numpy data or both. It depends on configuration list. You can't capture when camera is recording. If it capture successfully, you can get color_frame or depth_frame
-  
-  Example: 
-  ```
-  rsObj.capture()
-  rsObj.color_frame #numpy data or []
-  rsObj.depth_frame #depth data or []
-  ```
+   **Step 2: Get data**
 
-  startRecording(max_time_record): start recording to your bag file. Stop recording when timeout or stopRecording() is called. 
+   Change line 7 in [**getdata.py**] to your data folder location 
 
-  stopRecording(): stop recording immediately 
+   Run file [**getdata.py**]
 
-  updateConfig(streamInfos): to change the stream configuration. Can't change when camera is recording
-  Example:
-  ```
-  _depth = StreamInfo('depth', 640, 480, 'z16', 30)
-  rsObj.updateConfig([_depth.streamInfo()])
-  ```
-
-* **Example**
-
-  You can see the [test_realsense_d435.py](ttps://github.com/IVSR-SET-HUST/drone-coordinator/blob/sprint_2020-09-15/sensors/test_realsense2.py) to understand details
-
+     python3 getdata.py
+    
+   After, you will get all depth mat, depth jpg, rgb mat, rgb jpg in your data folder.
+   
+   **Step3: Run background subtraction**
+   
+   Notice: 
+   If you use GNU Octave instead of Matlab, you need to install image package.
+   
+    Run this line in Octave command:
+    
+    pkg install image-2.10.0.tar.gz
+    
+   Uncomment line 2 and 3 in [**read_depth_mat_v2.m**]
+   
+   Change line 4 in [**read_depth_mat_v2.m**] to your depth_mat data folder, and line 8 to your result folder.
+   
+   Run [**read_depth_mat_v2.m**], moving object will be detected, bounded, and distance (in mm) from camera to object will be displayed in the center of object. And image result is stored in your result folder.
+   
 ## References
 
 <a id="1">[1]</a> 
