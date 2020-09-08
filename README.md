@@ -20,44 +20,45 @@
  
   Fixed Camera captrue single object moving on a straight line.
   
-## **Implement**
+## **Implementation**
 
 **Step 1: Create data folder and result folder**
   
- Create data folder contains 4 subfolder: depth_mat, depth_img, rgb_mat, rgb_img
+  * Create data folder contains 4 subfolder: depth_mat, depth_img, rgb_mat, rgb_img
 
-   * depth_mat: stores file mat for each depth frame
+    * depth_mat: stores file mat for each depth frame
  
-   * depth_img: stores file jpg for each depth frame
+    * depth_img: stores file jpg for each depth frame
  
-   * rgb_mat: stores file mat for each color frame
+    * rgb_mat: stores file mat for each color frame
  
-   * rgb_img: stores file jpg for each color frame
+    * rgb_img: stores file jpg for each color frame
 
-   Create result folder
+  * Create result folder
 
-   **Step 2: Get data**
+**Step 2: Get data**
 
-   Change line 7 in [**getdata.py**] to your data folder location 
+Change line 7 in [**getdata.py**] to your data folder location 
 
-   Run file [**getdata.py**]
+Run file [**getdata.py**]
 
-     python3 getdata.py
+`python3 getdata.py`
     
-   After, you will get all depth mat, depth jpg, rgb mat, rgb jpg in your data folder.
+After, you will get all depth mat, depth jpg, rgb mat, rgb jpg in your data folder.
    
-   **Step3: Run background subtraction**
+**Step 3: Run background subtraction**
    
-   Notice: 
-   If you use GNU Octave instead of Matlab, you need to install image package.
+Notice: 
    
-    Run this line in Octave command:
+  *If you use GNU Octave instead of Matlab, you need to install image package.*
+   
+  *Run this line in Octave command:*
     
-    pkg install image-2.10.0.tar.gz
+  *`pkg install image-2.10.0.tar.gz`*
     
-   Uncomment line 2 and 3 in [**read_depth_mat_v2.m**]
+  *Uncomment line 2 and 3 in [**read_depth_mat_v2.m**]*
    
-   Change line 4 in [**read_depth_mat_v2.m**] to your depth_mat data folder, and line 8 to your result folder.
+Change line 4 in [**read_depth_mat_v2.m**] to your depth_mat data folder, and line 8 to your result folder.
    
    Run [**read_depth_mat_v2.m**], moving object will be detected, bounded, and distance (in mm) from camera to object will be displayed in the center of object. And image result is stored in your result folder.
    
